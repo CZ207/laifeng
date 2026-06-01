@@ -1,0 +1,73 @@
+import { type Variants, motion, useScroll, useTransform } from 'framer-motion'
+import { BatteryCharging, ChevronRight, Feather, Rotate3D, Sparkles, Wind } from 'lucide-react'
+import { useRef } from 'react'
+import airfoldMain from './assets/airfold-kv-wide.webp'
+import product from './assets/airfold-product-optimized.webp'
+import angle from './assets/angle.webp'
+import base from './assets/base.webp'
+import battery from './assets/battery.webp'
+import natural from './assets/natural-wind.webp'
+import portable from './assets/portable.webp'
+import usb from './assets/usb-c.webp'
+import airflow from './assets/wide-airflow.webp'
+import wind from './assets/wind.webp'
+import windowImg from './assets/window.webp'
+
+const fade: Variants = { hidden: { opacity: 0, y: 34 }, show: { opacity: 1, y: 0, transition: { duration: .82, ease: [0.16, 1, 0.3, 1] } } }
+const features = [
+  ['Wide-area airflow', 'A broader stream that feels softer, calmer, and closer to natural wind.', airflow, Wind],
+  ['Fold-and-go body', 'Compact enough for a desk drawer, tote bag, carry-on, or bedside table.', portable, Feather],
+  ['All-day battery', 'Long battery life with USB-C charging for summer days that do not stop.', battery, BatteryCharging],
+  ['Adjustable comfort', 'Flexible angle control creates a precise breeze without taking over the room.', angle, Rotate3D],
+] as const
+const modes = ['Morning hush', 'Soft summer', 'Forest drift', 'Peak breeze']
+
+function Air() {
+  return <div className="air-stream absolute left-[5%] top-[34%] z-0 h-48 w-[82%]">{Array.from({ length: 18 }).map((_, i) => <span key={i} style={{ '--x': `${(i % 6) * 4}%`, '--y': `${14 + (i * 17) % 72}%`, '--w': `${120 + (i % 5) * 32}px`, '--d': `${3.8 + (i % 4) * .55}s`, '--delay': `${i * -.32}s` } as React.CSSProperties} />)}</div>
+}
+
+function HeroAirflow() {
+  return <div className="hero-airflow" aria-hidden="true">
+    <div className="air-core" />
+    {Array.from({ length: 7 }).map((_, i) => <em key={`beam-${i}`} className="air-beam" style={{ '--i': i, '--delay': `${i * -.34}s` } as React.CSSProperties} />)}
+    {Array.from({ length: 9 }).map((_, i) => <i key={`arc-${i}`} className="air-arc" style={{ '--i': i, '--delay': `${i * -.42}s` } as React.CSSProperties} />)}
+    {Array.from({ length: 34 }).map((_, i) => <b key={`p-${i}`} className="air-particle" style={{ '--x': `${42 + (i * 7) % 42}%`, '--y': `${22 + (i * 19) % 56}%`, '--s': `${3 + (i % 4)}px`, '--d': `${2.8 + (i % 5) * .36}s`, '--delay': `${i * -.14}s` } as React.CSSProperties} />)}
+  </div>
+}
+
+function HeroProduct() {
+  return <motion.div className="relative mx-auto w-full max-w-[620px]" initial={{ opacity: 0, scale: .94 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }}>
+    <div className="relative h-[260px] overflow-hidden rounded-[1.8rem] shadow-[0_30px_80px_rgba(35,42,36,.14)] sm:h-[360px] sm:rounded-[2.2rem] lg:h-[430px] lg:rounded-[2.6rem]">
+      <motion.img src={product} alt="Laifen AirFold fan" className="h-full w-full rounded-[1.8rem] object-cover object-center sm:rounded-[2.2rem] lg:rounded-[2.6rem]" animate={{ scale: [1, 1.018, 1] }} transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }} />
+      <div className="absolute inset-0 rounded-[1.8rem] bg-gradient-to-br from-white/10 via-transparent to-[#bfd0bd]/10 sm:rounded-[2.2rem] lg:rounded-[2.6rem]" />
+      <motion.div className="absolute left-1/2 top-1/2 hidden h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/35 sm:block" animate={{ rotate: 360 }} transition={{ duration: 42, repeat: Infinity, ease: 'linear' }} />
+      <HeroAirflow />
+    </div>
+    <motion.div className="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-4" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .45, duration: .7 }}>
+      <div className="rounded-[1.2rem] border border-white/70 bg-white/70 px-4 py-4 shadow-[0_18px_50px_rgba(35,42,36,.08)] backdrop-blur-2xl sm:rounded-[1.6rem] sm:px-6 sm:py-5"><p className="text-3xl font-semibold tracking-[-0.06em] sm:text-4xl">14h</p><p className="mt-1 text-xs text-[#69736b] sm:text-sm">battery life</p></div>
+      <div className="rounded-[1.2rem] border border-white/70 bg-white/70 px-4 py-4 shadow-[0_18px_50px_rgba(35,42,36,.08)] backdrop-blur-2xl sm:rounded-[1.6rem] sm:px-6 sm:py-5"><p className="text-3xl font-semibold tracking-[-0.06em] sm:text-4xl">4</p><p className="mt-1 text-xs text-[#69736b] sm:text-sm">wind modes</p></div>
+    </motion.div>
+  </motion.div>
+}
+
+function Banner() {
+  const ref = useRef(null), { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] }), y = useTransform(scrollYProgress, [0, 1], [-70, 70])
+  return <section ref={ref} className="px-5 py-14 sm:px-8 sm:py-20 lg:px-12"><div className="relative mx-auto h-[520px] max-w-7xl overflow-hidden rounded-[2rem] bg-[#111412] sm:h-[620px] sm:rounded-[3rem]"><motion.img src={natural} alt="Natural wind" className="absolute inset-0 h-[120%] w-full object-cover opacity-80" style={{ y }} /><div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" /><Air /><motion.div className="absolute bottom-0 max-w-3xl p-7 text-white sm:p-12 lg:p-16" initial="hidden" whileInView="show" viewport={{ once: true }} variants={fade}><p className="text-xs uppercase tracking-[0.3em] text-white/70 sm:text-sm sm:tracking-[0.34em]">Natural wind</p><h2 className="mt-5 text-4xl font-semibold leading-[0.95] tracking-[-0.06em] sm:text-7xl">A breeze that does not interrupt the room.</h2><p className="mt-5 max-w-xl text-base leading-7 text-white/75 sm:mt-6 sm:text-lg sm:leading-8">Soft, directional, and visually quiet.</p></motion.div></div></section>
+}
+
+function Panel({ img, title, text }: { img: string; title: string; text: string }) {
+  return <motion.article className="group overflow-hidden rounded-[1.8rem] border border-[#ddd3c4] bg-[#fbf8f2] shadow-[0_20px_70px_rgba(34,41,35,.06)] sm:rounded-[2.2rem]" initial="hidden" whileInView="show" viewport={{ once: true, amount: .25 }} variants={fade} whileHover={{ y: -8 }}><div className="overflow-hidden bg-[#ebe4d8]"><img src={img} alt={title} className="h-56 w-full object-cover transition duration-700 group-hover:scale-105 sm:h-72" /></div><div className="p-6 sm:p-7"><h3 className="text-xl font-semibold tracking-[-0.04em] sm:text-2xl">{title}</h3><p className="mt-4 leading-7 text-[#687168]">{text}</p></div></motion.article>
+}
+
+function App() {
+  return <main className="min-h-screen bg-[#f5f1ea] text-[#111412]">
+    <section className="relative isolate overflow-hidden px-5 py-6 sm:px-8 lg:px-12"><div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_74%_10%,rgba(191,204,184,.44),transparent_28%),linear-gradient(180deg,#fbf8f2_0%,#f1eadf_100%)]" /><nav className="mx-auto flex max-w-7xl items-center justify-between border-b border-[#ddd3c4] py-5"><a href="#top" className="text-sm font-semibold tracking-[0.34em]">LAIFEN</a><div className="hidden items-center gap-10 text-sm text-[#5d665d] md:flex"><a href="#design">Design</a><a href="#airflow">Airflow</a><a href="#features">Features</a><a href="#gallery">Gallery</a></div><a href="#features" className="group inline-flex items-center gap-2 rounded-full bg-[#111412] px-5 py-2.5 text-sm font-medium text-white">Explore <ChevronRight className="h-4 w-4 transition group-hover:translate-x-1" /></a></nav><div id="top" className="mx-auto grid max-w-7xl items-center gap-10 pb-14 pt-14 sm:gap-12 sm:pb-20 sm:pt-20 lg:grid-cols-[.96fr_1.04fr] lg:pb-28 lg:pt-28"><motion.div initial="hidden" animate="show" variants={fade}><p className="mb-5 text-xs uppercase tracking-[0.24em] text-[#7b887a] sm:mb-7 sm:text-sm sm:tracking-[0.26em]">AirFold portable fan</p><h1 className="max-w-4xl text-balance text-6xl font-semibold leading-[0.86] tracking-[-0.08em] sm:text-8xl lg:text-9xl">Folded air. Refined calm.</h1><p className="mt-7 max-w-2xl text-lg leading-7 text-[#59645b] sm:mt-9 sm:text-2xl sm:leading-8">A sculptural portable fan with wide natural airflow, quiet presence, and the freedom to cool anywhere.</p><div className="mt-8 flex flex-col gap-3 sm:mt-11 sm:flex-row"><a href="#design" className="rounded-full bg-[#111412] px-7 py-3.5 text-center font-medium text-white shadow-xl shadow-black/10 sm:px-8 sm:py-4">Discover AirFold</a><a href="#gallery" className="rounded-full border border-[#cfc4b4] px-7 py-3.5 text-center font-medium sm:px-8 sm:py-4">View details</a></div></motion.div><HeroProduct /></div></section>
+    <section id="design" className="px-5 py-14 sm:px-8 sm:py-20 lg:px-12"><div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[1.15fr_.85fr]"><motion.div className="group overflow-hidden rounded-[2rem] bg-[#e9e1d5] sm:rounded-[3rem]" initial="hidden" whileInView="show" viewport={{ once: true }} variants={fade}><img src={airfoldMain} alt="AirFold product" className="h-[300px] w-full object-cover object-center transition duration-700 group-hover:scale-105 sm:h-[420px] lg:h-[560px]" /></motion.div><motion.div className="flex flex-col justify-between rounded-[2rem] bg-[#111412] p-7 text-white sm:rounded-[3rem] sm:p-10" initial="hidden" whileInView="show" viewport={{ once: true }} variants={fade}><div><p className="text-xs uppercase tracking-[0.3em] text-white/50 sm:text-sm sm:tracking-[0.34em]">Design</p><h2 className="mt-5 text-4xl font-semibold leading-[0.95] tracking-[-0.06em] sm:mt-6 sm:text-5xl">Compact form. Full-size comfort.</h2><p className="mt-5 text-base leading-7 text-white/70 sm:mt-6 sm:text-lg sm:leading-8">The folded structure reduces visual weight while keeping the experience premium, personal, and ready to move.</p></div><div className="mt-8 grid grid-cols-1 gap-3 text-sm text-white/75 sm:mt-10 sm:grid-cols-2">{['Foldable body','Low visual noise','Desk-ready base','Travel-friendly'].map(x => <span key={x} className="rounded-full border border-white/15 px-4 py-3">{x}</span>)}</div></motion.div></div></section>
+    <Banner />
+    <section id="features" className="px-5 py-14 sm:px-8 sm:py-20 lg:px-12"><div className="mx-auto max-w-7xl"><motion.div className="mb-10 flex flex-col justify-between gap-5 sm:mb-12 md:flex-row md:items-end" initial="hidden" whileInView="show" viewport={{ once: true }} variants={fade}><div><p className="text-xs uppercase tracking-[0.3em] text-[#7b887a] sm:text-sm sm:tracking-[0.34em]">Features</p><h2 className="mt-5 max-w-3xl text-4xl font-semibold tracking-[-0.06em] sm:text-7xl">Engineered for air that feels effortless.</h2></div><p className="max-w-sm leading-7 text-[#657066]">Every detail is designed around quiet cooling, portability, and a calmer everyday environment.</p></motion.div><div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">{features.map(([title,text,img,Icon]) => <motion.article key={title} className="group overflow-hidden rounded-[1.8rem] border border-[#ddd3c4] bg-[#fbf8f2] sm:rounded-[2.2rem]" initial="hidden" whileInView="show" viewport={{ once: true, amount: .2 }} variants={fade} whileHover={{ y: -8 }}><div className="relative overflow-hidden"><img src={img} alt={title} className="h-56 w-full object-cover transition duration-700 group-hover:scale-105 sm:h-64" /><Icon className="absolute left-5 top-5 h-6 w-6 text-[#111412]" /></div><div className="p-6"><h3 className="text-2xl font-semibold tracking-[-0.04em]">{title}</h3><p className="mt-4 leading-7 text-[#667066]">{text}</p></div></motion.article>)}</div></div></section>
+    <section id="airflow" className="px-5 py-14 sm:px-8 sm:py-20 lg:px-12"><div className="mx-auto grid max-w-7xl items-center gap-10 sm:gap-12 lg:grid-cols-[.9fr_1.1fr]"><motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={fade}><p className="text-xs uppercase tracking-[0.3em] text-[#7b887a] sm:text-sm sm:tracking-[0.34em]">Wind modes</p><h2 className="mt-5 text-4xl font-semibold tracking-[-0.06em] sm:text-7xl">Four moods of summer air.</h2><p className="mt-6 text-base leading-7 text-[#647064] sm:mt-7 sm:text-lg sm:leading-8">From a barely-there morning hush to a stronger peak breeze, AirFold changes with the rhythm of your day.</p></motion.div><div className="relative overflow-hidden rounded-[2rem] bg-[#e7dfd2] p-3 sm:rounded-[3rem] sm:p-6"><img src={wind} alt="Airflow visualization" className="h-[330px] w-full rounded-[1.6rem] object-cover sm:h-[480px] sm:rounded-[2.4rem]" /><Air /><div className="absolute bottom-6 left-6 right-6 grid gap-2 sm:bottom-10 sm:left-10 sm:right-10 sm:grid-cols-4 sm:gap-3">{modes.map((m,i) => <motion.div key={m} className="rounded-xl bg-white/75 p-3 text-xs font-medium backdrop-blur-xl sm:rounded-2xl sm:p-4 sm:text-sm" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * .08 }}>{m}</motion.div>)}</div></div></div></section>
+    <section id="gallery" className="px-5 py-14 sm:px-8 sm:py-20 lg:px-12"><div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-3"><Panel img={base} title="Stable base" text="Set it down and let the room breathe with a focused, gentle stream." /><Panel img={usb} title="USB-C convenience" text="Modern charging makes AirFold easy to power at home, work, or away." /><Panel img={windowImg} title="Quiet by the window" text="A soft breeze for reading, resting, and the small rituals of summer." /></div></section>
+    <section className="px-5 py-16 text-center sm:px-8 sm:py-24 lg:px-12"><Sparkles className="mx-auto mb-6 h-7 w-7 text-[#7b887a] sm:mb-8 sm:h-8 sm:w-8" /><h2 className="mx-auto max-w-5xl text-balance text-4xl font-semibold leading-[0.92] tracking-[-0.07em] sm:text-8xl">Carry the breeze. Keep the calm.</h2><p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-[#647064] sm:mt-8 sm:text-lg sm:leading-8">Laifen AirFold brings natural-feeling airflow into a compact, refined form made for modern movement.</p><a href="#top" className="mt-8 inline-flex rounded-full bg-[#111412] px-7 py-3.5 font-medium text-white sm:mt-10 sm:px-8 sm:py-4">Back to top</a></section><footer className="border-t border-[#ddd3c4] px-5 py-7 text-center text-xs text-[#687168] sm:py-8 sm:text-sm">Laifen AirFold · Product landing page concept</footer>
+  </main>
+}
+export default App
