@@ -1,5 +1,155 @@
 @import "tailwindcss";
 
+.opening-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(82, 124, 255, 0.22), transparent 24%),
+    radial-gradient(circle at 50% 58%, rgba(123, 168, 134, 0.12), transparent 30%),
+    linear-gradient(180deg, #030405 0%, #090b0d 46%, #0f1215 100%);
+}
+
+.loader-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.7) 0.8px, transparent 1px),
+    radial-gradient(circle at 80% 30%, rgba(255,255,255,0.4) 0.8px, transparent 1px),
+    radial-gradient(circle at 35% 75%, rgba(255,255,255,0.45) 0.6px, transparent 1px);
+  background-size: 180px 180px, 240px 240px, 160px 160px;
+}
+
+.loader-glow {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(40px);
+  animation: ambientGlow 7s ease-in-out infinite;
+}
+
+.loader-glow-a {
+  width: 26rem;
+  height: 26rem;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(92, 138, 255, 0.28), transparent 68%);
+}
+
+.loader-glow-b {
+  width: 18rem;
+  height: 18rem;
+  left: 50%;
+  top: 58%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(121, 175, 134, 0.22), transparent 72%);
+  animation-duration: 9s;
+}
+
+.loader-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loader-fan {
+  position: relative;
+  width: 12rem;
+  height: 12rem;
+  border-radius: 999px;
+}
+
+.loader-spoke {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5.5rem;
+  height: 1px;
+  transform-origin: left center;
+  transform: rotate(calc(var(--i) * 18deg)) translateX(0);
+  background: linear-gradient(90deg, rgba(255,255,255,0.92), rgba(202, 211, 255, 0.26), transparent 86%);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.16);
+  opacity: 0.82;
+}
+
+.loader-ring {
+  position: absolute;
+  inset: 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: 0 0 30px rgba(110, 145, 255, 0.16);
+}
+
+.loader-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255,255,255,0.92), rgba(150,190,255,0.4) 42%, rgba(121,175,134,0.16) 72%, transparent 100%);
+  box-shadow: 0 0 24px rgba(132, 173, 255, 0.45), 0 0 50px rgba(119, 162, 132, 0.2);
+}
+
+.loader-air {
+  position: absolute;
+  left: calc(50% + 1.8rem);
+  top: calc(50% - 2rem);
+  width: 18rem;
+  height: 8rem;
+  pointer-events: none;
+}
+
+.loader-air i {
+  position: absolute;
+  left: 0;
+  top: calc(var(--i) * 12px);
+  width: calc(7rem + var(--i) * 1.35rem);
+  height: 0.45rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.95), rgba(124, 166, 255, 0.56), rgba(123, 168, 134, 0.22), transparent);
+  filter: blur(1px);
+  opacity: 0;
+  animation: loaderAirFlow 2.8s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -0.18s);
+}
+
+.loader-copy {
+  margin-top: 2.8rem;
+  text-align: center;
+  color: white;
+}
+
+.loader-copy p {
+  margin: 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.5em;
+  color: rgba(255,255,255,0.6);
+}
+
+.loader-copy h2 {
+  margin: 1rem 0 0;
+  font-size: clamp(2rem, 6vw, 4.6rem);
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+}
+
+.loader-copy span {
+  display: block;
+  margin-top: 0.9rem;
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
 :root {
   color: #111412;
   background: #f5f1ea;
@@ -117,7 +267,10 @@ button {
   isolation: isolate;
 }
 
-.hero-frame::after,
+.hero-frame {
+  filter: drop-shadow(0 34px 90px rgba(35, 42, 36, 0.16));
+}
+
 .panel-card::after,
 .stat-card::after {
   content: '';
@@ -130,11 +283,6 @@ button {
   pointer-events: none;
 }
 
-.hero-frame::after {
-  animation: glossSweep 7.5s ease-in-out infinite;
-  opacity: 1;
-}
-
 .panel-card:hover::after,
 .stat-card:hover::after {
   animation: glossSweep 1.2s ease;
@@ -144,8 +292,7 @@ button {
 .hero-gloss {
   position: absolute;
   inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(circle at 24% 18%, rgba(255,255,255,0.28), transparent 28%), linear-gradient(180deg, rgba(255,255,255,0.06), transparent 40%);
+  background: radial-gradient(circle at 30% 24%, rgba(255,255,255,0.12), transparent 24%);
   mix-blend-mode: screen;
   pointer-events: none;
 }
@@ -162,6 +309,14 @@ button {
 .parallax-media img,
 .hero-frame img {
   will-change: transform;
+}
+
+.hero-product-image {
+  padding-top: 0;
+  transform: scale(1.18);
+  transform-origin: center 72%;
+  object-position: center 88%;
+  filter: drop-shadow(0 36px 60px rgba(0, 0, 0, 0.26));
 }
 
 .air-stream {
@@ -183,6 +338,20 @@ button {
   animation: windFlow var(--d) linear infinite;
   animation-delay: var(--delay);
   opacity: 0;
+}
+
+@keyframes loaderAirFlow {
+  0% {
+    transform: translateX(-12px) scaleX(0.35);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateX(150px) scaleX(1.2);
+    opacity: 0;
+  }
 }
 
 @keyframes windFlow {
@@ -214,8 +383,8 @@ button {
 
 .air-core {
   position: absolute;
-  left: 48%;
-  top: 35%;
+  left: 42%;
+  top: 18%;
   width: 150px;
   height: 150px;
   border-radius: 999px;
@@ -229,8 +398,8 @@ button {
 
 .air-beam {
   position: absolute;
-  left: 48%;
-  top: calc(35% + var(--i) * 14px);
+  left: 42%;
+  top: calc(18% + var(--i) * 14px);
   width: calc(210px + var(--i) * 34px);
   height: 8px;
   border-radius: 999px;
@@ -246,8 +415,8 @@ button {
 .air-arc {
   --spread: calc(var(--i) * 22px);
   position: absolute;
-  left: 46%;
-  top: 38%;
+  left: 40%;
+  top: 22%;
   width: calc(190px + var(--spread));
   height: calc(76px + var(--spread) * 0.25);
   border-top: 2px solid rgba(95, 141, 255, 0.48);
@@ -378,6 +547,26 @@ button {
 }
 
 @media (max-width: 640px) {
+  .loader-fan {
+    width: 8.4rem;
+    height: 8.4rem;
+  }
+
+  .loader-air {
+    width: 11rem;
+    left: calc(50% + 1rem);
+    top: calc(50% - 1.5rem);
+  }
+
+  .loader-copy h2 {
+    font-size: 2.4rem;
+  }
+
+  .loader-copy span {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+  }
+
   .hero-airflow {
     opacity: 0.72;
   }
@@ -394,25 +583,33 @@ button {
     background-size: 170% auto;
   }
 
+  .hero-product-image {
+    padding-top: 0;
+    transform: scale(1.1);
+    transform-origin: center 72%;
+    object-position: center 88%;
+    filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.18));
+  }
+
   .air-core {
-    left: 54%;
-    top: 42%;
+    left: 39%;
+    top: 16%;
     width: 86px;
     height: 86px;
     box-shadow: 0 0 24px rgba(137, 179, 255, 0.3), 0 0 46px rgba(132, 167, 125, 0.2);
   }
 
   .air-beam {
-    left: 54%;
-    top: calc(42% + var(--i) * 10px);
+    left: 40%;
+    top: calc(17% + var(--i) * 10px);
     width: calc(108px + var(--i) * 20px);
     height: 5px;
     filter: blur(1px);
   }
 
   .air-arc {
-    left: 52%;
-    top: 44%;
+    left: 38%;
+    top: 19%;
     width: calc(92px + var(--spread));
     height: calc(42px + var(--spread) * 0.18);
     border-top-width: 1.5px;
